@@ -1,8 +1,12 @@
 import 'package:eye_distance/presentation/home.dart';
 import 'package:flutter/material.dart';
+import 'multi_bloc_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    const ProvideMultiBloc(child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,10 +14,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: const HomeView(),
+      home: HomeView(),
     );
   }
 }
-
