@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:eye_distance/logic/camera_cubit.dart';
+import 'package:eye_distance/logic/camera_distance_cubit.dart';
+import 'package:eye_distance/logic/camera_distance_state.dart';
 import 'package:eye_distance/logic/camera_state.dart';
 import 'package:eye_distance/presentation/widgets/cstm_camera_border.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +79,23 @@ class CameraView extends StatelessWidget {
                             ],
                           ),
                         ),
-
+                        BlocBuilder<CameraDistanceCubit, CameraDistanceState> (
+                          builder: (context, state) {
+                            if (state is CameraDistanceChanged) {
+                              return Text(
+                                '${state.distance}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
