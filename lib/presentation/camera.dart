@@ -1,9 +1,6 @@
-import 'package:camera/camera.dart';
 import 'package:eye_distance/logic/camera_cubit.dart';
-import 'package:eye_distance/logic/camera_distance_cubit.dart';
-import 'package:eye_distance/logic/camera_distance_state.dart';
 import 'package:eye_distance/logic/camera_state.dart';
-import 'package:eye_distance/presentation/widgets/cstm_camera_border.dart';
+import 'package:eye_distance/presentation/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,11 +9,10 @@ class CameraView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.sizeOf(context).height;
-    double width = MediaQuery.sizeOf(context).width;
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -50,63 +46,53 @@ class CameraView extends StatelessWidget {
                 ),
               );
             } else if (state is CameraLoaded) {
-              CameraController camera =
-                  context.read<CameraCubit>().camera;
-              return camera.value.isInitialized == true
-                  ? Stack(
-                children: [
-                  SizedBox(
-                    height: height,
-                    width: width,
-                    child: CameraPreview(
-                      camera,
-                    ),
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  Center(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                     child: Column(
-                      children: [
-                        const SizedBox(height: 150,),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              CustomPaint(
-                                foregroundPainter: BorderPainter(),
-                                child: SizedBox(
-                                  width: MediaQuery.sizeOf(context).width * 0.75,
-                                  height: MediaQuery.sizeOf(context).height * 0.175,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        BlocBuilder<CameraDistanceCubit, CameraDistanceState> (
-                          builder: (context, state) {
-                            if (state is CameraDistanceChanged) {
-                              return Text(
-                                '${state.distance}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black,
-                                ),
-                                textAlign: TextAlign.center,
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                        ),
+                      children: <Widget>[
+                        Text('Rules',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),),
+                        SizedBox(height: 5.0,),
+                        Text('(1): Keep your phone at a still position.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),),
+                        Text('(2): Move away from phone once you are at ideal distance test will start.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),),
+                        Text('(3): Stay at the same distance throughout the test.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),),
                       ],
                     ),
                   ),
-                ],
-              )
-                  : const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black,
                 ),
               );
-            } else {
+            } else if (state is CameraSuccess) {
+              context.read<CameraCubit>().disposeCamera();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TestView()));
+              return const SizedBox.shrink();
+            }else {
               return const SizedBox.shrink();
             }
           },
