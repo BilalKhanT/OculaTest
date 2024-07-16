@@ -7,13 +7,13 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 class CameraCubit extends Cubit<CameraState> {
   CameraCubit() : super(CameraInitial());
 
-  CameraController? camera;
+  late CameraController camera;
   late List<CameraDescription> cameras;
   FaceDetector? faceDetector;
   List<Face>? facesList;
 
   void disposeCamera() {
-    camera?.dispose();
+    camera.dispose();
     faceDetector?.close();
   }
 
