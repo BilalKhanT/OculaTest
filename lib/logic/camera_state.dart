@@ -10,6 +10,8 @@ sealed class CameraState extends Equatable {
 
 class CameraInitial extends CameraState {}
 
+class CameraSuccess extends CameraState {}
+
 class CameraLoading extends CameraState {}
 
 class CameraLoaded extends CameraState {
